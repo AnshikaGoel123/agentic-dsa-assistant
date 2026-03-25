@@ -37,3 +37,13 @@ def analyze_code(code):
     4. Time and space complexity
     """
     return call_llm(prompt)
+
+
+def generate_code(question):
+    prompt = f"""
+    Give code.
+    Write a clean and simple C++ solution.
+    Do not add explanation.
+    Question: {question}
+    """
+    return call_llm(prompt)

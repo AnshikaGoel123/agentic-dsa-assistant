@@ -1,7 +1,7 @@
-from agent import run_agent
+from groq import Groq
+import os
 
-print(run_agent("I am stuck on binary search"))
-print("\n-----------------\n")
-print(run_agent("Explain stack"))
-print("\n-----------------\n")
-print(run_agent("int a[5]={1,2,3,4,5}; for(int i=0;i<=5;i++){cout<<a[i];}"))
+client = Groq(
+    api_key=os.getenv("GROQ_API_KEY").strip(),
+    base_url="https://api.groq.com"
+)

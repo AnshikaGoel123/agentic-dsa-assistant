@@ -1,6 +1,8 @@
 import streamlit as st
 from agent import run_agent
 from memory import get_weak_topics
+from dotenv import load_dotenv
+load_dotenv()
 
 st.set_page_config(page_title="Agentic DSA Assistant", layout="centered")
 

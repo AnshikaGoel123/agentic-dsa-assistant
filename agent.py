@@ -1,4 +1,4 @@
-from tools import generate_hint, explain_concept, analyze_code
+from tools import generate_hint, explain_concept, analyze_code, generate_code
 from llm import call_llm
 from memory import update_memory, add_to_history
 
@@ -28,11 +28,12 @@ def decide_action(user_input):
     - hint
     - explain
     - analyze
+    - code
 
     Input: {user_input}
 
     Return intents as a comma-separated list.
-    Example: "explain, analyze"
+    Example: "explain, analyze, code"
     """
 
     decision = call_llm(prompt).lower()
@@ -46,11 +47,18 @@ def run_agent(user_input):
 
     if len(user_input) > 2000:
         return "Input too long. Please shorten it."
+    
+    user_input_lower = user_input.lower()
 
     decision = decide_action(user_input)
 
     topic = extract_topic(user_input)
     update_memory("user1", topic)
+
+    if "code" in user_input_lower or "solve" in user_input_lower:
+        response = generate_code(user_input)
+        add_to_history(user_input, response)
+        return response
 
     responses = []
 
@@ -62,6 +70,10 @@ def run_agent(user_input):
 
     if "hint" in decision or not responses:
         responses.append(generate_hint(user_input))
+
+    if "code" in decision:
+        responses.append(generate_code(user_input))
+
 
     final_response = "\n\n".join(responses)
 
